@@ -1,0 +1,214 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Campaigns{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h3>Campaigns</h3>
+
+        <a href="{{ url_for('campaigns.create_campaign') }}"
+           class="btn btn-success">
+
+            <i class="bi bi-plus-circle"></i>
+
+            New Campaign
+
+        </a>
+
+    </div>
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            {% if campaigns %}
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Name</th>
+
+                            <th>Template</th>
+
+                            <th>Status</th>
+
+                            <th>Created</th>
+
+                            <th>Recipients</th>
+
+                            <th class="text-center">Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for campaign in campaigns %}
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+
+                                    {{ campaign.campaign_name }}
+
+                                </strong>
+
+                                {% if campaign.description %}
+
+                                <br>
+
+                                <small class="text-muted">
+
+                                    {{ campaign.description[:80] }}
+
+                                    {% if campaign.description|length > 80 %}
+
+                                        ...
+
+                                    {% endif %}
+
+                                </small>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if campaign.template %}
+
+                                    {{ campaign.template.template_name }}
+
+                                {% else %}
+
+                                    <span class="text-muted">
+
+                                        No Template
+
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if campaign.status == "Draft" %}
+
+                                    <span class="badge bg-secondary">
+
+                                        Draft
+
+                                    </span>
+
+                                {% elif campaign.status == "Active" %}
+
+                                    <span class="badge bg-success">
+
+                                        Active
+
+                                    </span>
+
+                                {% elif campaign.status == "Completed" %}
+
+                                    <span class="badge bg-primary">
+
+                                        Completed
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-warning text-dark">
+
+                                        {{ campaign.status }}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {{ campaign.created_at.strftime("%d %b %Y") }}
+
+                            </td>
+                            <td>
+
+                             {{ campaign.recipients|length }}
+
+                            <td class="text-center">
+
+                                    <a href="{{ url_for('campaigns.add_recipients', id=campaign.id) }}"
+                                    class="btn btn-sm btn-success">
+
+                                        Manage Recipients
+
+
+                                    </a>
+
+                                    <a href="{{ url_for('campaigns.view_campaign', id=campaign.id) }}"
+                                    class="btn btn-sm btn-primary">
+
+                                        Campaign Details
+
+
+                                    </a>
+
+                                </td>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="text-center py-5">
+
+                <h5>No Campaigns Yet</h5>
+
+                <p class="text-muted">
+
+                    Create your first email campaign to begin reaching buyers.
+
+                </p>
+
+                <a href="{{ url_for('campaigns.create_campaign') }}"
+                   class="btn btn-success">
+
+                    Create Campaign
+
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

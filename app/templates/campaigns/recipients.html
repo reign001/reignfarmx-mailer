@@ -1,0 +1,125 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Recipients{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card shadow">
+
+        <div class="card-header">
+
+            <h3>{{ campaign.name }}</h3>
+
+            <p class="text-muted">
+                Select the companies that should receive this campaign.
+            </p>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                {{ form.hidden_tag() }}
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover">
+
+                        <thead>
+
+                            <tr>
+
+                                <th width="50"></th>
+
+                                <th>Company</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for value, label in form.companies.choices %}
+
+                            <tr>
+
+                                <td>
+
+                                    <input
+                                        type="checkbox"
+                                        name="companies"
+                                        value="{{ value }}"
+                                        {% if value in form.companies.data %}
+                                            checked
+                                        {% endif %}
+                                    >
+
+                                </td>
+
+                                <td>
+
+                                    {{ label }}
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        Save Recipients
+
+                    </button>
+
+                    {% if form.companies.data %}
+
+                    <a href="{{ url_for('campaigns.view_campaign', id=campaign.id) }}"
+                    class="btn btn-success">
+
+                        Continue to Send
+
+                    </a>
+
+                    {% endif %}
+
+                    <a href="{{ url_for('campaigns.list_campaigns') }}"
+                    class="btn btn-secondary">
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+                <a href="{{ url_for('campaigns.view_campaign', id=campaign.id) }}"
+                   class="btn btn-secondary">
+
+                    Back
+
+                </a>
+
+            </form>
+
+        </div>
+
+        
+
+    </div>
+
+</div>
+
+{% endblock %}

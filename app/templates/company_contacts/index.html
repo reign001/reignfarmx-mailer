@@ -1,0 +1,176 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Company Contacts{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2>{{ company.company_name }}</h2>
+
+        <p class="text-muted">
+
+            Contact Management
+
+        </p>
+
+    </div>
+
+    <div>
+
+        <a href="{{ url_for('company.view_company', id=company.id) }}"
+           class="btn btn-secondary">
+
+            Back to Company
+
+        </a>
+
+        <a href="{{ url_for('company_contact.create',
+                            company_id=company.id) }}"
+           class="btn btn-success">
+
+            Add Contact
+
+        </a>
+
+    </div>
+
+</div>
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover">
+
+                <thead class="table-dark">
+
+                <tr>
+
+                    <th>Name</th>
+
+                    <th>Position</th>
+
+                    <th>Email</th>
+
+                    <th>Phone</th>
+
+                    <th>Department</th>
+
+                    <th>Primary</th>
+
+                    <th>Status</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for contact in contacts %}
+
+                <tr>
+
+                    <td>
+
+                        {{ contact.first_name }}
+
+                        {{ contact.last_name }}
+
+                    </td>
+
+                    <td>{{ contact.job_title }}</td>
+
+                    <td>{{ contact.email }}</td>
+
+                    <td>{{ contact.phone }}</td>
+
+                    <td>{{ contact.department }}</td>
+
+                    <td>
+
+                        {% if contact.is_primary %}
+
+                        <span class="badge bg-success">
+
+                            Primary
+
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {{ contact.status }}
+
+                    </td>
+
+                    <td>
+
+                        <a href="{{ url_for('company_contact.edit',
+                                company_id=company.id,
+                                id=contact.id) }}"
+                           class="btn btn-warning btn-sm">
+
+                            Edit
+
+                        </a>
+
+                        {% if not contact.is_primary %}
+
+                        <form method="POST"
+                              action="{{ url_for('company_contact.make_primary',
+                                company_id=company.id,
+                                id=contact.id) }}"
+                              style="display:inline;">
+
+                            <button class="btn btn-info btn-sm">
+
+                                Make Primary
+
+                            </button>
+
+                        </form>
+
+                        {% endif %}
+
+                        <form method="POST"
+                              action="{{ url_for('company_contact.delete',
+                                company_id=company.id,
+                                id=contact.id) }}"
+                              style="display:inline;">
+
+                            <button class="btn btn-danger btn-sm"
+                            onclick="return confirm('Delete contact?')">
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

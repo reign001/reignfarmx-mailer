@@ -1,0 +1,56 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Campaign Preview{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card shadow">
+
+        <div class="card-header">
+
+            <h3>{{ campaign.name }}</h3>
+
+            {% if company %}
+                <small class="text-muted">
+                    Preview for {{ company.company_name }}
+                </small>
+            {% endif %}
+
+        </div>
+
+        <div class="card-body">
+
+            <h5>Subject</h5>
+
+            <div class="alert alert-secondary">
+                {{ subject }}
+            </div>
+
+            <h5>Email Body</h5>
+
+            <div class="border rounded p-3 bg-white">
+
+                {{ body|replace('\n', '<br>')|safe }}
+
+            </div>
+
+        </div>
+
+        <div class="card-footer">
+
+            <a href="{{ url_for('campaigns.view_campaign', id=campaign.id) }}"
+               class="btn btn-secondary">
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

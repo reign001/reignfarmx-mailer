@@ -1,0 +1,379 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Companies{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2>Companies</h2>
+        <p class="text-muted">
+            Total Companies: {{ companies.total }}
+        </p>
+    </div>
+
+    <a href="{{ url_for('company.create_company') }}"
+       class="btn btn-success">
+        Add Company
+    </a>
+
+</div>
+
+<form method="GET" class="mb-3">
+
+    <div class="input-group">
+
+        <input
+            type="text"
+            class="form-control"
+            name="search"
+            placeholder="Search company..."
+            value="{{ search }}">
+
+        <button class="btn btn-primary">
+            Search
+        </button>
+
+    </div>
+
+</form>
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover table-bordered">
+
+                <thead class="table-dark">
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Company</th>
+
+                        <th>Primary Commodity</th>
+
+                        <th>Other Commodities</th>
+
+                        <th>Country</th>
+
+                        <th>City</th>
+
+                        <th>Primary Contact</th>
+
+                        <th>Email</th>
+
+                        <th>Website</th>
+
+                        <th>Status</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                {% for company in companies.items %}
+
+                <tr>
+
+                    <td>
+                        {{ loop.index + ((companies.page - 1) * companies.per_page) }}
+                    </td>
+
+                    <td>
+
+                        <strong>{{ company.company_name }}</strong>
+
+                        {% if company.notes %}
+                            <br>
+                            <small class="text-muted">
+                                {{ company.notes[:60] }}{% if company.notes|length > 60 %}...{% endif %}
+                            </small>
+                        {% endif %}
+
+                    </td>
+
+                    <!-- Primary Commodity -->
+
+                    <td>
+
+                        {% set primary = company.company_products
+                            | selectattr("is_primary")
+                            | first %}
+
+                        {% if primary %}
+
+                            <span class="badge bg-success">
+                                {{ primary.product.product_name }}
+                            </span>
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                —
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <!-- Other Commodities -->
+
+                    <td>
+
+                        {% for cp in company.company_products %}
+
+                            <span class="badge bg-secondary">
+
+                                {{ cp.product.product_name }}
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="text-muted">
+
+                                None
+
+                            </span>
+
+                        {% endfor %}
+
+                    </td>
+
+                    <td>{{ company.country }}</td>
+
+                    <td>{{ company.city or "-" }}</td>
+
+                    <!-- Contact -->
+
+                    <td>
+
+                        {% set contact = company.contacts
+                            | selectattr("is_primary")
+                            | first %}
+
+                        {% if contact %}
+
+                            <strong>
+
+                                {{ contact.first_name }}
+                                {{ contact.last_name }}
+
+                            </strong>
+
+                            <br>
+
+                            <small class="text-muted">
+
+                                {{ contact.job_title }}
+
+                            </small>
+
+                        {% else %}
+
+                            <span class="text-muted">
+
+                                No Contact
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <!-- Email -->
+
+                    <td>
+
+                        {% if contact %}
+
+                            {{ contact.email }}
+
+                        {% else %}
+
+                            {{ company.email }}
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if company.website %}
+
+                            <a href="{{ company.website }}"
+                            target="_blank">
+
+                                Visit
+
+                            </a>
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if company.status == "Active" %}
+
+                            <span class="badge bg-success">
+
+                                Active
+
+                            </span>
+
+                        {% elif company.status == "Prospect" %}
+
+                            <span class="badge bg-warning">
+
+                                Prospect
+
+                            </span>
+
+                        {% elif company.status == "Customer" %}
+
+                            <span class="badge bg-primary">
+
+                                Customer
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-secondary">
+
+                                {{ company.status }}
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        <div class="btn-group btn-group-sm">
+
+                            <a
+                                href="{{ url_for('company.view_company', id=company.id) }}"
+                                class="btn btn-info">
+
+                                View
+
+                            </a>
+
+                            <a
+                                href="{{ url_for('company.edit_company', id=company.id) }}"
+                                class="btn btn-warning">
+
+                                Edit
+
+                            </a>
+
+                            <form
+                                method="POST"
+                                action="{{ url_for('company.delete_company', id=company.id) }}"
+                                style="display:inline;">
+
+                                <button
+                                    class="btn btn-danger"
+                                    onclick="return confirm('Delete this company?')">
+
+                                    Delete
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="11" class="text-center">
+
+                        No companies found.
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<nav class="mt-4">
+
+    <ul class="pagination">
+
+        {% if companies.has_prev %}
+
+        <li class="page-item">
+
+            <a class="page-link"
+               href="{{ url_for('company.index', page=companies.prev_num, search=search) }}">
+                Previous
+            </a>
+
+        </li>
+
+        {% endif %}
+
+        {% for page_num in companies.iter_pages() %}
+
+            {% if page_num %}
+
+                <li class="page-item {% if page_num == companies.page %}active{% endif %}">
+
+                    <a class="page-link"
+                       href="{{ url_for('company.index', page=page_num, search=search) }}">
+                        {{ page_num }}
+                    </a>
+
+                </li>
+
+            {% endif %}
+
+        {% endfor %}
+
+        {% if companies.has_next %}
+
+        <li class="page-item">
+
+            <a class="page-link"
+               href="{{ url_for('company.index', page=companies.next_num, search=search) }}">
+                Next
+            </a>
+
+        </li>
+
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+{% endblock %}

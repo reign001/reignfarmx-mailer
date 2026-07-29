@@ -1,0 +1,107 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+
+Dashboard
+
+{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">
+
+Dashboard
+
+</h2>
+
+<div class="row">
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm">
+
+            <div class="card-body">
+
+                <h5>Total Companies</h5>
+
+                <h2>{{ total_companies }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm">
+
+            <div class="card-body">
+
+                <h5>Email Templates</h5>
+
+                <h2>{{ total_templates }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm">
+
+            <div class="card-body">
+
+                <h5>Campaigns</h5>
+
+                <h2>{{ total_campaigns }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm">
+
+            <div class="card-body">
+
+                <h5>Emails Sent</h5>
+
+                <h2>{{ total_sent }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="mt-5">
+
+    <a href="{{ url_for('company.create_company') }}" class="btn btn-success">
+
+        Add Company
+
+    </a>
+
+    <a href="{{ url_for('templates.create_template') }}" class="btn btn-primary">
+
+        New Template
+
+    </a>
+
+    <a href="{{ url_for('campaigns.create_campaign') }}" class="btn btn-warning">
+
+        New Campaign
+
+    </a>
+
+</div>
+
+{% endblock %}

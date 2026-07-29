@@ -1,0 +1,106 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card shadow">
+
+        <div class="card-header">
+
+            <h3>{{ title }}</h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+
+                    {{ form.template_name.label(class="form-label") }}
+
+                    {{ form.template_name(class="form-control") }}
+
+                    {% for error in form.template_name.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+
+                </div>
+
+                <div class="mb-3">
+
+                    {{ form.subject.label(class="form-label") }}
+
+                    {{ form.subject(class="form-control") }}
+
+                    {% for error in form.subject.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+
+                </div>
+
+                <div class="mb-3">
+
+                    {{ form.body.label(class="form-label") }}
+
+                    {{ form.body(class="form-control", rows="18") }}
+
+                    {% for error in form.body.errors %}
+                        <small class="text-danger">{{ error }}</small>
+                    {% endfor %}
+
+                </div>
+
+                <div class="mb-4">
+
+                    <div class="alert alert-info">
+
+                        <h5>Available Variables</h5>
+
+                        <hr>
+
+                        <code>{{ "{{ company_name }}" }}</code><br>
+                        <code>{{ "{{ country }}" }}</code><br>
+                        <code>{{ "{{ state }}" }}</code><br>
+                        <code>{{ "{{ city }}" }}</code><br>
+                        <code>{{ "{{ email }}" }}</code><br>
+                        <code>{{ "{{ website }}" }}</code><br>
+                        <code>{{ "{{ products }}" }}</code><br>
+                        <code>{{ "{{ today }}" }}</code>
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-success">
+
+                    Save Template
+
+                </button>
+
+                <a
+                    href="{{ url_for('templates.list_templates') }}"
+                    class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

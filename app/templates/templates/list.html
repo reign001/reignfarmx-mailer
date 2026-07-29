@@ -1,0 +1,48 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+<h2>Email Templates</h2>
+
+<a href="{{ url_for('templates.create_template') }}"
+   class="btn btn-primary mb-3">
+    New Template
+</a>
+
+<table class="table table-bordered">
+
+    <thead>
+
+        <tr>
+
+            <th>Name</th>
+
+            <th>Subject</th>
+
+            <th>Status</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+    {% for template in templates %}
+
+        <tr>
+
+            <td>{{ template.name }}</td>
+
+            <td>{{ template.subject }}</td>
+
+            <td>{{ "Active" if template.is_active else "Inactive" }}</td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
