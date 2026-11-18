@@ -1,0 +1,52 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Create Product{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div class="card-header">
+
+        <h3>Add Product</h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST">
+
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3">
+
+                {{ form.product_name.label(class="form-label") }}
+
+                {{ form.product_name(class="form-control") }}
+
+            </div>
+
+            <div class="mb-3">
+
+                {{ form.description.label(class="form-label") }}
+
+                {{ form.description(class="form-control", rows=5) }}
+
+            </div>
+
+            {{ form.submit(class="btn btn-success") }}
+
+            <a href="{{ url_for('product.index') }}"
+               class="btn btn-secondary">
+
+                Cancel
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

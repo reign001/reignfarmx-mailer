@@ -1,0 +1,129 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}{{ product.product_name }}{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2>{{ product.product_name }}</h2>
+
+        <p class="text-muted">
+
+            Product Details
+
+        </p>
+
+    </div>
+
+    <a href="{{ url_for('product.edit', id=product.id) }}"
+       class="btn btn-warning">
+
+        Edit Product
+
+    </a>
+
+</div>
+
+<div class="card mb-4">
+
+    <div class="card-body">
+
+        <h5>Description</h5>
+
+        <p>
+
+            {{ product.description or "No description available." }}
+
+        </p>
+
+    </div>
+
+</div>
+
+<div class="card">
+
+    <div class="card-header">
+
+        Companies Buying This Product
+
+    </div>
+
+    <div class="card-body">
+
+        {% if product.company_products %}
+
+        <table class="table table-bordered">
+
+            <thead>
+
+                <tr>
+
+                    <th>Company</th>
+                    <th>Country</th>
+                    <th>Email</th>
+                    <th>Primary</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for cp in product.company_products %}
+
+                <tr>
+
+                    <td>
+
+                        <a href="{{ url_for('company.view_company', id=cp.company.id) }}">
+
+                            {{ cp.company.company_name }}
+
+                        </a>
+
+                    </td>
+
+                    <td>{{ cp.company.country }}</td>
+
+                    <td>{{ cp.company.email }}</td>
+
+                    <td>
+
+                        {% if cp.is_primary %}
+
+                            Yes
+
+                        {% else %}
+
+                            No
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <p class="text-muted">
+
+            No companies are currently associated with this product.
+
+        </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

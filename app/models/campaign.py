@@ -3,6 +3,7 @@ from app.models.base import BaseModel
 
 
 class Campaign(BaseModel):
+
     __tablename__ = "campaigns"
 
     name = db.Column(
@@ -19,20 +20,9 @@ class Campaign(BaseModel):
         nullable=True
     )
 
-    recipients = db.relationship(
-    "CampaignRecipient",
-    back_populates="campaign",
-    cascade="all, delete-orphan",
-    lazy="selectin"
-)
-
     status = db.Column(
         db.String(20),
         default="Draft"
-    )
-
-    template = db.relationship(
-        "EmailTemplate"
     )
 
     description = db.Column(
@@ -40,15 +30,21 @@ class Campaign(BaseModel):
     )
 
     recipients = db.relationship(
-    "CampaignRecipient",
-    back_populates="campaign",
-    cascade="all, delete-orphan",
-    lazy="selectin")
+        "CampaignRecipient",
+        back_populates="campaign",
+        cascade="all, delete-orphan",
+        lazy="selectin"
+    )
 
     email_logs = db.relationship(
-    "EmailLog",
-    back_populates="campaign",
-    cascade="all, delete-orphan")
+        "EmailLog",
+        back_populates="campaign",
+        cascade="all, delete-orphan"
+    )
+
+    template = db.relationship(
+        "EmailTemplate"
+    )
 
     def __repr__(self):
         return self.name

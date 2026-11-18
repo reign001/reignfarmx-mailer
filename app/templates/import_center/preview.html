@@ -1,0 +1,176 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Import Preview{% endblock %}
+
+{% block content %}
+
+<h2>Import Preview</h2>
+
+<div class="row mb-4">
+
+    <div class="col-md-3">
+
+        <div class="card">
+
+            <div class="card-body">
+
+                <h6>Total</h6>
+
+                <h3>{{ preview.summary.total }}</h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card">
+
+            <div class="card-body">
+
+                <h6>Valid</h6>
+
+                <h3>{{ preview.summary.valid }}</h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card">
+
+            <div class="card-body">
+
+                <h6>Duplicates</h6>
+
+                <h3>{{ preview.summary.duplicates }}</h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card">
+
+            <div class="card-body">
+
+                <h6>Invalid</h6>
+
+                <h3>{{ preview.summary.invalid }}</h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<form method="POST"
+      action="{{ url_for('import_center.import_data') }}">
+
+    <button class="btn btn-success">
+
+        <i class="bi bi-check-circle"></i>
+
+        Import Valid Records
+
+    </button>
+
+</form>
+
+<hr>
+
+<div class="table-responsive">
+
+<table class="table table-striped">
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Company</th>
+
+<th>Email</th>
+
+<th>Country</th>
+
+<th>Product</th>
+
+<th>Status</th>
+
+<th>Reason</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for row in preview.rows %}
+
+<tr>
+
+<td>{{ loop.index }}</td>
+
+<td>{{ row.company_name }}</td>
+
+<td>{{ row.email }}</td>
+
+<td>{{ row.country }}</td>
+
+<td>{{ row.product }}</td>
+
+<td>
+
+{% if row.status == "Valid" %}
+
+<span class="badge bg-success">
+
+Valid
+
+</span>
+
+{% elif row.status == "Duplicate" %}
+
+<span class="badge bg-warning">
+
+Duplicate
+
+</span>
+
+{% else %}
+
+<span class="badge bg-danger">
+
+Invalid
+
+</span>
+
+{% endif %}
+
+</td>
+
+<td>{{ row.reason }}</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+{% endblock %}

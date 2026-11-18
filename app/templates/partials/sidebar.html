@@ -1,0 +1,143 @@
+<div class="sidebar">
+
+    <div class="brand">
+
+        <h3>ReignFarmX</h3>
+
+        <small>Export CRM</small>
+
+    </div>
+
+    <hr>
+
+    <!-- Dashboard -->
+
+    <div class="menu-section">
+
+        <span class="menu-title">
+
+            GENERAL
+
+        </span>
+
+        <a href="{{ url_for('dashboard.index') }}"
+           class="menu-link">
+
+            <i class="bi bi-speedometer2"></i>
+
+            Dashboard
+
+        </a>
+
+    </div>
+
+    <!-- Buyer Database -->
+
+    <div class="menu-section">
+
+        <span class="menu-title">
+
+            BUYER DATABASE
+
+        </span>
+
+        <a href="{{ url_for('company.index') }}"
+           class="menu-link">
+
+            <i class="bi bi-building"></i>
+
+            Companies
+
+        </a>
+
+        <a href="{{ url_for('product.index') }}"
+           class="menu-link">
+
+            <i class="bi bi-box-seam"></i>
+
+            Products
+
+        </a>
+
+        <a href="#"
+           class="menu-link">
+
+            <i class="bi bi-clock-history"></i>
+
+            Import History
+
+        </a>
+
+    </div>
+
+    <!-- Campaigns -->
+
+    <div class="menu-section">
+
+        <span class="menu-title">
+
+            CAMPAIGNS
+
+        </span>
+
+        <a href="{{ url_for('campaigns.list_campaigns') }}"
+           class="menu-link">
+
+            <i class="bi bi-send"></i>
+
+            Campaigns
+
+        </a>
+
+        <a href="{{ url_for('templates.list_templates') }}"
+           class="menu-link">
+
+            <i class="bi bi-file-earmark-text"></i>
+
+            Templates
+
+        </a>
+
+        <a href="#"
+           class="menu-link">
+
+            <i class="bi bi-envelope-check"></i>
+
+            Email Logs
+
+        </a>
+
+        <a
+                href="{{ url_for('import_center.upload') }}"
+                class="menu-link">
+
+                <i class="bi bi-upload"></i>
+
+                Import Center
+
+        </a>
+
+    </div>
+
+    <!-- Reports -->
+
+    <div class="menu-section">
+
+        <span class="menu-title">
+
+            REPORTS
+
+        </span>
+
+        <a href="#"
+           class="menu-link">
+
+            <i class="bi bi-bar-chart"></i>
+
+            Statistics
+
+        </a>
+
+    </div>
+
+</div>

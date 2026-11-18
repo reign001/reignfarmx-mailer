@@ -7,15 +7,18 @@ class Company(BaseModel):
     __tablename__ = "companies"
 
     company_name = db.Column(
-        db.String(200),
+        db.String(250),
         nullable=False
     )
 
     email = db.Column(
-        db.String(200),
+        db.String(254),
         unique=True,
         nullable=False
     )
+
+    phone = db.Column(
+    db.String(50))
 
     campaigns = db.relationship(
     "CampaignRecipient",
@@ -67,37 +70,27 @@ class Company(BaseModel):
     company_type = db.Column(
         db.String(100)
     )
-
-    industry = db.Column(
-    db.String(150)
-    )
+    
 
     company_type = db.Column(
         db.String(100)
     )
 
-    destination_port = db.Column(
-        db.String(150)
-    )
+    destination_port = db.Column(db.String(150))
 
-    preferred_incoterm = db.Column(
-        db.String(30)
-    )
+    preferred_incoterm = db.Column(db.String(30))
 
-    verified = db.Column(
-        db.Boolean,
-        default=False
-    )
+    verified = db.Column(db.Boolean, default=False)
 
-    linkedin = db.Column(
-    db.String(300))
+    linkedin = db.Column(db.String(300))
 
-    contacts = db.relationship(
-    "CompanyContact",
-    back_populates="company",
-    cascade="all, delete-orphan",
-    lazy="selectin"
-)
-
+    contacts = db.relationship("CompanyContact", back_populates="company", cascade="all, delete-orphan", lazy="selectin")
+    buyer_type = db.Column(db.String(200))
+    website = db.Column(db.String(255))
+    linkedin = db.Column(db.String(255))
+    verification_status = db.Column(db.String(20), default="Verified")
+    source = db.Column(db.Text)
+    notes = db.Column(db.Text)
+    priority_score = db.Column(db.Integer, default=50)
     def __repr__(self):
         return f"<Company {self.company_name}>"

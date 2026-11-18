@@ -14,93 +14,138 @@ Dashboard
 
 </h2>
 
-<div class="row">
+<div class="sidebar">
 
-    <div class="col-md-3">
+    <div class="sidebar-brand">
 
-        <div class="card shadow-sm">
+        <h3>ReignFarmX</h3>
 
-            <div class="card-body">
-
-                <h5>Total Companies</h5>
-
-                <h2>{{ total_companies }}</h2>
-
-            </div>
-
-        </div>
+        <small>Export CRM</small>
 
     </div>
 
-    <div class="col-md-3">
+    <hr>
 
-        <div class="card shadow-sm">
+    <ul class="nav flex-column">
 
-            <div class="card-body">
+        <li class="nav-item">
 
-                <h5>Email Templates</h5>
+            <a href="{{ url_for('dashboard.index') }}"
+               class="nav-link">
 
-                <h2>{{ total_templates }}</h2>
+                📊 Dashboard
 
-            </div>
+            </a>
 
-        </div>
+        </li>
 
-    </div>
+    </ul>
 
-    <div class="col-md-3">
+    <h6 class="sidebar-heading mt-4">
 
-        <div class="card shadow-sm">
+        Buyer Database
 
-            <div class="card-body">
+    </h6>
 
-                <h5>Campaigns</h5>
+    <ul class="nav flex-column">
 
-                <h2>{{ total_campaigns }}</h2>
+        <li>
 
-            </div>
+            <a href="{{ url_for('company.index') }}"
+               class="nav-link">
 
-        </div>
+                🏢 Companies
 
-    </div>
+            </a>
 
-    <div class="col-md-3">
+        </li>
 
-        <div class="card shadow-sm">
+        <li>
 
-            <div class="card-body">
+            <a href="{{ url_for('company_contact.index') }}"
+               class="nav-link">
 
-                <h5>Emails Sent</h5>
+                👥 Contacts
 
-                <h2>{{ total_sent }}</h2>
+            </a>
 
-            </div>
+        </li>
 
-        </div>
+        <li>
 
-    </div>
+            <a href="{{ url_for('product.index') }}"
+               class="nav-link">
 
-</div>
+                📦 Products
 
-<div class="mt-5">
+            </a>
+            <p>
+                total_products = Product.query.count()
+            </p>
 
-    <a href="{{ url_for('company.create_company') }}" class="btn btn-success">
+        </li>
 
-        Add Company
+        <li>
 
-    </a>
+            <a href="#">
 
-    <a href="{{ url_for('templates.create_template') }}" class="btn btn-primary">
+                📥 Import Buyers
 
-        New Template
+            </a>
 
-    </a>
+        </li>
 
-    <a href="{{ url_for('campaigns.create_campaign') }}" class="btn btn-warning">
+        <li>
 
-        New Campaign
+            <a href="#">
 
-    </a>
+                📄 Import History
+
+            </a>
+
+        </li>
+
+    </ul>
+
+    <h6 class="sidebar-heading mt-4">
+
+        Campaigns
+
+    </h6>
+
+    <ul class="nav flex-column">
+
+        <li>
+
+            <a href="{{ url_for('campaigns.list_campaigns') }}">
+
+                📧 Campaigns
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="{{ url_for('templates.list_templates') }}">
+
+                📝 Templates
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="#">
+
+                📜 Email Logs
+
+            </a>
+
+        </li>
+
+    </ul>
 
 </div>
 

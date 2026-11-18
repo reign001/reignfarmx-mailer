@@ -37,3 +37,133 @@ body{
 .card{
     border:none;
 }
+
+/*=======================*/
+ /*new template css  */
+/* ======================== */
+
+.app-layout{
+
+    display:flex;
+
+    min-height:100vh;
+
+}
+
+.sidebar{
+
+    width:260px;
+
+    background:#1f2937;
+
+    color:#fff;
+
+    flex-shrink:0;
+
+}
+
+.main-content{
+
+    flex:1;
+
+    background:#f8f9fa;
+
+    padding:25px;
+
+}
+
+.topbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#fff;
+
+    padding:15px 25px;
+
+    border-radius:12px;
+
+    margin-bottom:20px;
+
+}
+
+.menu-link{
+
+    display:block;
+
+    padding:12px 18px;
+
+    color:#d1d5db;
+
+    text-decoration:none;
+
+    border-radius:8px;
+
+    margin-bottom:5px;
+
+}
+
+.menu-link:hover{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.footer{
+
+    margin-top:40px;
+
+    padding:18px 25px;
+
+    background:#ffffff;
+
+    border-top:1px solid #dee2e6;
+
+    border-radius:10px;
+
+    color:#6c757d;
+
+    font-size:14px;
+
+}
+
+/* BETTER ALERT */
+
+.alert{
+
+    border:none;
+
+    border-left:5px solid transparent;
+
+    border-radius:10px;
+
+}
+
+.alert-success{
+
+    border-left-color:#198754;
+
+}
+
+.alert-danger{
+
+    border-left-color:#dc3545;
+
+}
+
+.alert-warning{
+
+    border-left-color:#ffc107;
+
+}
+
+.alert-info{
+
+    border-left-color:#0dcaf0;
+
+}

@@ -1,0 +1,1 @@
+{"created": 7, "skipped": 3, "errors": [{"row": 3, "company": "Z-Company B.V.", "error": "Already exists"}, {"row": 5, "company": "Origin & Amsterdam", "error": "Already exists"}, {"row": 10, "company": "Fuji Oil Europe", "error": "Already exists"}]}

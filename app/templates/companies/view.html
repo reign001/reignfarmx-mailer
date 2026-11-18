@@ -19,11 +19,10 @@
 <p><strong>Status:</strong> {{ company.status }}</p>
 
 
-<a href="{{ url_for('company_contact.index',
-        company_id=company.id) }}"
+<a href="{{ url_for('company_contact.company_contacts', company_id=company.id) }}"
    class="btn btn-primary">
 
-    Contacts
+    view Contacts
 
 </a>
 

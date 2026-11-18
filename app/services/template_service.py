@@ -55,33 +55,21 @@ class TemplateService:
 
             primary_product = primary.product.product_name
 
-            quantity = primary.quantity or ""
-
-            packaging = primary.packaging or ""
-
-            destination_country = (
-                primary.destination_country or ""
-            )
-
-            destination_port = (
-                primary.destination_port or ""
-            )
-
-            incoterm = primary.incoterm or ""
-
         else:
 
             primary_product = ""
 
-            quantity = ""
+        # These fields are not currently stored
+        # on CompanyProduct.
+        quantity = ""
 
-            packaging = ""
+        packaging = ""
 
-            destination_country = ""
+        destination_country = ""
 
-            destination_port = ""
+        destination_port = ""
 
-            incoterm = ""
+        incoterm = ""
 
         product_names = [
             cp.product.product_name

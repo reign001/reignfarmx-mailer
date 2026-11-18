@@ -14,7 +14,6 @@
            class="btn btn-success">
 
             <i class="bi bi-plus-circle"></i>
-
             New Campaign
 
         </a>
@@ -57,12 +56,11 @@
 
                         <tr>
 
+                            <!-- Campaign Name -->
                             <td>
 
                                 <strong>
-
                                     {{ campaign.campaign_name }}
-
                                 </strong>
 
                                 {% if campaign.description %}
@@ -74,9 +72,7 @@
                                     {{ campaign.description[:80] }}
 
                                     {% if campaign.description|length > 80 %}
-
                                         ...
-
                                     {% endif %}
 
                                 </small>
@@ -85,6 +81,8 @@
 
                             </td>
 
+
+                            <!-- Template -->
                             <td>
 
                                 {% if campaign.template %}
@@ -94,83 +92,136 @@
                                 {% else %}
 
                                     <span class="text-muted">
-
                                         No Template
-
                                     </span>
 
                                 {% endif %}
 
                             </td>
 
+
+                            <!-- Status -->
                             <td>
 
                                 {% if campaign.status == "Draft" %}
 
                                     <span class="badge bg-secondary">
-
                                         Draft
-
                                     </span>
 
                                 {% elif campaign.status == "Active" %}
 
                                     <span class="badge bg-success">
-
                                         Active
-
                                     </span>
 
                                 {% elif campaign.status == "Completed" %}
 
                                     <span class="badge bg-primary">
-
                                         Completed
-
                                     </span>
 
                                 {% else %}
 
                                     <span class="badge bg-warning text-dark">
-
                                         {{ campaign.status }}
-
                                     </span>
 
                                 {% endif %}
 
                             </td>
 
+
+                            <!-- Created -->
                             <td>
 
                                 {{ campaign.created_at.strftime("%d %b %Y") }}
 
                             </td>
+
+
+                            <!-- Recipients -->
                             <td>
 
-                             {{ campaign.recipients|length }}
-
-                            <td class="text-center">
-
-                                    <a href="{{ url_for('campaigns.add_recipients', id=campaign.id) }}"
-                                    class="btn btn-sm btn-success">
-
-                                        Manage Recipients
-
-
-                                    </a>
-
-                                    <a href="{{ url_for('campaigns.view_campaign', id=campaign.id) }}"
-                                    class="btn btn-sm btn-primary">
-
-                                        Campaign Details
-
-
-                                    </a>
-
-                                </td>
+                                {{ campaign.recipients|length }}
 
                             </td>
+
+
+                            <!-- Actions -->
+                                <td class="text-center">
+
+                                    <div class="d-flex justify-content-center gap-2">
+
+                                        <!-- View Report -->
+                                        <a
+                                            href="{{ url_for('campaigns.view_campaign', id=campaign.id) }}"
+                                            class="btn btn-sm btn-primary"
+                                        >
+                                            <i class="bi bi-bar-chart"></i>
+                                            View Report
+                                        </a>
+
+
+                                        <!-- Manage Recipients -->
+                                        <a
+                                            href="{{ url_for('campaigns.add_recipients', id=campaign.id) }}"
+                                            class="btn btn-sm btn-success"
+                                        >
+                                            <i class="bi bi-people"></i>
+                                            Manage Recipients
+                                        </a>
+
+
+                                        <!-- Send Campaign -->
+                                        {% if campaign.recipients and campaign.template %}
+
+                                        <form
+                                            method="POST"
+                                            action="{{ url_for('campaigns.send_campaign', id=campaign.id) }}"
+                                            style="display: inline;"
+                                            onsubmit="return confirm(
+                                                'Are you sure you want to send this campaign to {{ campaign.recipients|length }} recipients?'
+                                            );"
+                                        >
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-sm btn-danger"
+                                            >
+                                                <i class="bi bi-send"></i>
+                                                Send Mail
+                                            </button>
+
+                                        </form>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                    <!-- Delete Campaign -->
+                                     <div>
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('campaigns.delete_campaign', id=campaign.id) }}"
+                                        style="display: inline;"
+                                        onsubmit="return confirm(
+                                            'Are you sure you want to delete this campaign? This will permanently delete the campaign, its recipients, and its email logs.'
+                                        );"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm btn-outline-danger"
+                                        >
+                                            <i class="bi bi-trash"></i>
+                                            Delete
+                                        </button>
+
+                                    </form>
+                                    </div>
+
+                                </td>
 
                         </tr>
 
@@ -194,8 +245,10 @@
 
                 </p>
 
-                <a href="{{ url_for('campaigns.create_campaign') }}"
-                   class="btn btn-success">
+                <a
+                    href="{{ url_for('campaigns.create_campaign') }}"
+                    class="btn btn-success"
+                >
 
                     Create Campaign
 

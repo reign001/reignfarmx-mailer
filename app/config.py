@@ -18,16 +18,6 @@ class Config:
 
     MAIL_PORT = int(os.getenv("MAIL_PORT"))
 
-    # MAIL_USE_TLS = os.getenv(
-    #     "MAIL_USE_TLS",
-    #     "False"
-    # ).lower() == "true"
-
-    # MAIL_USE_SSL = os.getenv(
-    #     "MAIL_USE_SSL",
-    #     "False"
-    # ).lower() == "true"
-
     MAIL_USERNAME = "contactperson@reignfarmx.com"
 
     MAIL_PASSWORD = "Ecoset14#"
@@ -41,6 +31,15 @@ class Config:
     USERNAME = "contactperson@reignfarmx.com"
     PASSWORD = "Ecoset14#"
 
+    MAIL_BATCH_SIZE = 20
+    MAIL_SEND_DELAY_SECONDS = 10
+    
+    HOSTINGER_API_TOKEN="R1N0xSauE0aj6GSf875F3lKPzjLA38R0rIF4wWeu6336c0f5"
+    HOSTINGER_ORDER_ID="ORe4e47baf663988c4a2a5789e43d9"
+    MAIL_SEND_DELAY_SECONDS = 10
+    import os
+
+    MAIL_SEND_DELAY_SECONDS = (MAIL_SEND_DELAY_SECONDS, 10)
     server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT)
     server.login(USERNAME, PASSWORD)
     print("Login successful!")

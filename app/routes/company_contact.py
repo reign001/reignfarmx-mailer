@@ -17,11 +17,24 @@ from app.forms.company_contact_form import CompanyContactForm
 company_contact_bp = Blueprint(
     "company_contact",
     __name__,
-    url_prefix="/companies/<int:company_id>/contacts"
+    url_prefix="/contacts"
 )
 
 @company_contact_bp.route("/")
-def index(company_id):
+def index():
+
+    contacts = CompanyContact.query.order_by(
+        CompanyContact.first_name
+    ).all()
+    
+
+    return render_template(
+        "compannies/view.html",
+        contacts=contacts
+    )
+
+@company_contact_bp.route("/company/<int:company_id>")
+def company_contacts(company_id):
 
     company = Company.query.get_or_404(company_id)
 
@@ -33,7 +46,7 @@ def index(company_id):
     ).all()
 
     return render_template(
-        "company_contacts/index.html",
+        "company_contacts/company_contacts.html",
         company=company,
         contacts=contacts
     )

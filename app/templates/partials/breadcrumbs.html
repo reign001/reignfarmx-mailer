@@ -1,0 +1,21 @@
+<nav>
+
+    <ol class="breadcrumb">
+
+        <li class="breadcrumb-item">
+
+            <a href="{{ url_for('dashboard.index') }}">
+
+                Dashboard
+
+            </a>
+
+        </li>
+
+        {% block breadcrumbs %}
+
+        {% endblock %}
+
+    </ol>
+
+</nav>

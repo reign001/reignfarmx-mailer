@@ -1,79 +1,505 @@
 {% extends "layouts/base.html" %}
 
-{% block title %}Campaign Details{% endblock %}
-
 {% block content %}
 
-<div class="container-fluid">
+<div class="container-fluid py-4">
+
+    <!-- =====================================================
+         CAMPAIGN HEADER
+    ====================================================== -->
 
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
+            <h2 class="mb-1">
+                {{ campaign.name }}
+            </h2>
 
-            <h2>{{ campaign.campaign_name }}</h2>
-
-            <p class="text-muted">
-
-                {{ campaign.status }}
-
+            <p class="text-muted mb-0">
+                Campaign Email Report
             </p>
-
         </div>
 
-        <a href="{{ url_for('campaigns.list_campaigns') }}"
-           class="btn btn-secondary">
+        <div class="d-flex gap-2">
 
-            Back
+            <a
+                href="{{ url_for('campaigns.preview_campaign', id=campaign.id) }}"
+                class="btn btn-outline-secondary"
+            >
+                Preview
+            </a>
 
-        </a>
+            <a
+                href="{{ url_for('campaigns.add_recipients', id=campaign.id) }}"
+                class="btn btn-outline-primary"
+            >
+                Manage Recipients
+            </a>
+
+            {% if campaign.recipients and campaign.template %}
+            <form
+                method="POST"
+                action="{{ url_for('campaigns.send_campaign', id=campaign.id) }}"
+                class="d-inline"
+                onsubmit="return confirm(
+                    'Are you sure you want to send this campaign to {{ campaign.recipients|length }} recipients?'
+                );"
+            >
+                <button
+                    type="submit"
+                    class="btn btn-danger"
+                >
+                    <i class="bi bi-send"></i>
+                    Send Mail
+                </button>
+            </form>
+            {% endif %}
+
+        </div>
+        <div>
+        <form method="POST"
+                action="{{ url_for(
+                    'campaigns.sync_delivery',
+                    id=campaign.id
+                ) }}"
+                style="display: inline;"
+            >
+                <button
+                    type="submit"
+                    class="btn btn-outline-primary"
+                >
+                    Refresh Delivery Status
+                </button>
+            </form>
+            </div>
+            <div>
+            <form
+                method="POST"
+                action="{{ url_for(
+                    'campaigns.resend_unopened',
+                    id=campaign.id
+                ) }}"
+                style="display: inline;"
+                onsubmit="
+                    return confirm(
+                        'Resend the same email to all delivered recipients who have no recorded open?'
+                    );
+                "
+            >
+                <button
+                    type="submit"
+                    class="btn btn-outline-warning"
+                >
+                    Resend Unopened
+                </button>
+            </form>
+            </div>
 
     </div>
 
-    <div class="row">
 
-        <div class="col-md-4">
+    <!-- =====================================================
+         SUMMARY CARDS
+    ====================================================== -->
 
-            <div class="card shadow mb-4">
+    <div class="row g-3 mb-4">
 
-                <div class="card-header">
+        <div class="col-md-2">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <small class="text-muted">
+                        Total
+                    </small>
 
-                    Campaign Information
+                    <h3 class="mb-0">
+                        {{ total }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-2">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <small class="text-muted">
+                        Sent
+                    </small>
+
+                    <h3 class="mb-0">
+                        {{ sent }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-2">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <small class="text-muted">
+                        Delivered
+                    </small>
+
+                    <h3 class="mb-0">
+                        {{ delivered }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-2">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <small class="text-muted">
+                        Opened
+                    </small>
+
+                    <h3 class="mb-0">
+                        {{ opened }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-2">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <small class="text-muted">
+                        Failed
+                    </small>
+
+                    <h3 class="mb-0">
+                        {{ failed }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-2">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <small class="text-muted">
+                        Pending
+                    </small>
+
+                    <h3 class="mb-0">
+                        {{ pending }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         RATES
+    ====================================================== -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <h5 class="mb-3">
+                Campaign Performance
+            </h5>
+
+            <div class="row">
+
+                <div class="col-md-4">
+
+                    <strong>
+                        Delivery Rate
+                    </strong>
+
+                    <div class="progress mt-2" style="height: 20px;">
+
+                        <div
+                            class="progress-bar"
+                            role="progressbar"
+                            style="width: {{ delivery_rate }}%;"
+                        >
+                            {{ delivery_rate }}%
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        Delivered / Sent
+                    </small>
 
                 </div>
 
-                <div class="card-body">
 
-                    <table class="table">
+                <div class="col-md-4">
+
+                    <strong>
+                        Open Rate
+                    </strong>
+
+                    <div class="progress mt-2" style="height: 20px;">
+
+                        <div
+                            class="progress-bar"
+                            role="progressbar"
+                            style="width: {{ open_rate }}%;"
+                        >
+                            {{ open_rate }}%
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        Opened / Delivered
+                    </small>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <strong>
+                        Failure Rate
+                    </strong>
+
+                    <div class="progress mt-2" style="height: 20px;">
+
+                        <div
+                            class="progress-bar"
+                            role="progressbar"
+                            style="width: {{ failure_rate }}%;"
+                        >
+                            {{ failure_rate }}%
+                        </div>
+
+                    </div>
+
+                    <small class="text-muted">
+                        Failed / Total
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         RECIPIENT REPORT
+    ====================================================== -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+
+            <h5 class="mb-0">
+                Recipient Report
+            </h5>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover table-striped mb-0">
+
+                    <thead>
 
                         <tr>
 
-                            <th>Name</th>
+                            <th>
+                                Company
+                            </th>
 
-                            <td>{{ campaign.campaign_name }}</td>
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Sent
+                            </th>
+
+                            <th>
+                                Delivered
+                            </th>
+
+                            <th>
+                                Opened
+                            </th>
+
+                            <th>
+                                Opens
+                            </th>
+
+                            <th>
+                                Failure Reason
+                            </th>
 
                         </tr>
 
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for recipient in recipients %}
+
                         <tr>
-
-                            <th>Status</th>
-
-                            <td>{{ campaign.status }}</td>
-
-                        </tr>
-
-                        <tr>
-
-                            <th>Template</th>
 
                             <td>
 
-                                {% if campaign.template %}
+                                {% if recipient.company %}
 
-                                    {{ campaign.template.template_name }}
+                                    {{ recipient.company.company_name }}
 
                                 {% else %}
 
-                                    -
+                                    <span class="text-muted">
+                                        Company unavailable
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if recipient.company %}
+
+                                    {{ recipient.company.email or "—" }}
+
+                                {% else %}
+
+                                    —
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if recipient.status == "Pending" %}
+
+                                    <span class="badge bg-secondary">
+                                        Pending
+                                    </span>
+
+                                {% elif recipient.status == "Sent" %}
+
+                                    <span class="badge bg-primary">
+                                        Sent
+                                    </span>
+
+                                {% elif recipient.status == "Delivered" %}
+
+                                    <span class="badge bg-success">
+                                        Delivered
+                                    </span>
+
+                                {% elif recipient.status == "Opened" %}
+
+                                    <span class="badge bg-success">
+                                        Opened
+                                    </span>
+
+                                {% elif recipient.status == "Failed" %}
+
+                                    <span class="badge bg-danger">
+                                        Failed
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-dark">
+                                        {{ recipient.status }}
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if recipient.sent_at %}
+
+                                    {{ recipient.sent_at.strftime("%Y-%m-%d %H:%M") }}
+
+                                {% else %}
+
+                                    —
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if recipient.delivered_at %}
+
+                                    {{ recipient.delivered_at.strftime("%Y-%m-%d %H:%M") }}
+
+                                {% else %}
+
+                                    —
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if recipient.opened_at %}
+
+                                    {{ recipient.opened_at.strftime("%Y-%m-%d %H:%M") }}
+
+                                {% else %}
+
+                                    —
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td class="text-center">
+                                <strong>
+                                    {{ recipient.open_count|default(0, true) }}
+                                </strong>
+                            </td>
+
+
+                            <td>
+
+                                {% if recipient.error_message %}
+
+                                    <span
+                                        class="text-danger"
+                                        title="{{ recipient.error_message }}"
+                                    >
+                                        {{ recipient.error_message }}
+                                    </span>
+
+                                {% else %}
+
+                                    —
 
                                 {% endif %}
 
@@ -81,123 +507,45 @@
 
                         </tr>
 
+                        {% else %}
+
                         <tr>
 
-                            <th>Created</th>
-
-                            <td>
-
-                                {{ campaign.created_at.strftime("%d %b %Y") }}
-
+                            <td
+                                colspan="8"
+                                class="text-center py-4"
+                            >
+                                No recipients have been added to
+                                this campaign yet.
                             </td>
 
                         </tr>
 
-                    </table>
+                        {% endfor %}
 
-                </div>
+                    </tbody>
+
+                </table>
 
             </div>
 
         </div>
 
-        <div class="col-md-8">
+    </div>
 
-            <div class="card shadow mt-4">
 
-                <div class="card-header">
+    <!-- =====================================================
+         OPEN TRACKING NOTE
+    ====================================================== -->
 
-                    Recipients
+    <div class="alert alert-info mt-4">
 
-                </div>
+        <strong>Open tracking:</strong>
 
-                <div class="card-body">
-
-                    {% if campaign.recipients %}
-
-                        <table class="table table-striped">
-
-                            <thead>
-
-                                <tr>
-
-                                    <th>Company</th>
-
-                                    <th>Email</th>
-
-                                </tr>
-
-                            </thead>
-
-                            <tbody>
-
-                            {% for recipient in campaign.recipients %}
-
-                                <tr>
-
-                                    <td>
-
-                                        {{ recipient.company.company_name }}
-
-                                    </td>
-
-                                    <td>
-
-                                        {{ recipient.company.email }}
-
-                                    </td>
-
-                                </tr>
-
-                            {% endfor %}
-
-                            </tbody>
-
-                        </table>
-
-                    {% else %}
-
-                        <p class="text-muted">
-
-                            No companies have been added to this campaign.
-
-                        </p>
-
-                    {% endif %}
-
-                </div>
-                                <div class="mb-4">
-
-                    <a href="{{ url_for('campaigns.add_recipients', id=campaign.id) }}"
-                    class="btn btn-primary">
-
-                        Manage Recipients
-
-                    </a>
-
-                    <a href="{{ url_for('campaigns.preview_campaign', id=campaign.id) }}"
-                    class="btn btn-info">
-
-                        Preview Email
-
-                    </a>
-
-                    <form method="POST"
-                        action="{{ url_for('campaigns.send_campaign', id=campaign.id) }}"
-                        style="display:inline;">
-
-                        <button class="btn btn-success">
-
-                            Send Campaign
-
-                        </button>
-
-                    </form>
-
-                </div>
-            </div>
-
-        </div>
+        Open counts are based on requests for the email
+        tracking pixel. Some email clients block or cache
+        remote images, so open tracking may not represent
+        every actual email read.
 
     </div>
 
